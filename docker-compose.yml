@@ -1,0 +1,49 @@
+services:
+  mysql:
+    image: mysql:8.0 # Utilise l'image officielle MySQL version 8.0
+    restart: always #  Redémarre automatiquement le conteneur en cas de crash
+    environment:
+      #  Variables d’environnement nécessaires à l’initialisation de MySQL
+      MYSQL_ROOT_PASSWORD: root # Mot de passe du super-utilisateur root
+      MYSQL_DATABASE: escaperoom_db # Base de données initiale à créer au démarrage
+    ports:
+      - "3306:3306" #  Expose le port MySQL local 3306 à l’hôte
+    volumes:
+      - mysql_data:/var/lib/mysql #  Persiste les données MySQL sur le disque via un volume Docker
+    networks:
+      - escaperoom_net #  Connecte le service à un réseau Docker commun pour permettre la communication avec les autres services
+
+  backend:
+    build: ./escaperoom-spring #  Construit le backend Spring Boot à partir du Dockerfile situé dans ./escaperoom-spring
+    ports:
+      - "8089:8089" #  Expose le port du backend vers l’hôte
+    depends_on:
+      - mysql #  Assure que MySQL démarre avant le backend
+    environment:
+      #  Configuration des variables d’environnement pour Spring Boot
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/escaperoom_db?createDatabaseIfNotExist=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update #  Mise à jour automatique du schéma de la BDD
+      SPRING_JPA_SHOW_SQL: "true" #  Affiche les requêtes SQL dans la console
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
+      SPRING_MAIL_USERNAME: williamnyacka14@gmail.com
+      SPRING_MAIL_PASSWORD: tavzfvnajqjoohzx
+    networks:
+      - escaperoom_net #  Même réseau que MySQL pour permettre la connexion à la BDD
+
+  frontend:
+    build: ./escaperoom-angular #  Construit le frontend Angular à partir du Dockerfile situé dans ./escaperoom-angular
+    ports:
+      - "80:80" #  Expose l'application Angular sur le port 80 de l’hôte
+    depends_on:
+      - backend #  Assure que le backend est démarré avant le frontend
+    networks:
+      - escaperoom_net #  Connecté au même réseau que le backend pour pouvoir faire des appels API
+
+volumes:
+  mysql_data:
+    #  Volume Docker nommé pour persister les données MySQL
+
+networks:
+  escaperoom_net: #  Réseau personnalisé Docker permettant la communication entre les services
