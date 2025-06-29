@@ -1,0 +1,81 @@
+<main style="background-color: #F6B51F; height: 50rem;">
+    <!-- La couleur de fond de la page est définie sur #F6B51F (une couleur jaune-orangé). -->
+    
+    <div class="container py-5">
+        <!-- Un conteneur Bootstrap avec des marges verticales de 5 unités (py-5). -->
+        
+        <div class="row justify-content-center">
+            <!-- Une ligne Bootstrap centrée horizontalement pour aligner les éléments à l'intérieur au centre. -->
+            
+            <div class="col-xl-6 col-lg-8">
+                <!-- Une colonne qui prend 6/12 de la largeur sur les écrans extra-larges et 8/12 sur les écrans larges. -->
+                
+                <div class="card shadow-sm">
+                    <!-- Une carte avec une légère ombre (shadow-sm). -->
+                    
+                    <div class="card-body p-5">
+                        <!-- Le corps de la carte avec des espacements de 5 unités (p-5). -->
+                        
+                        <h3 class="h4 text-theme text-center mb-4">Login</h3>
+                        <!-- Un titre principal de taille h4, centré, avec une classe "text-theme" pour appliquer une couleur de texte spécifique, et une marge en bas de 4 unités. -->
+                        
+                        <h6 class="h5">Heureux de vous revoir!</h6>
+                        <!-- Un sous-titre avec une taille h5. -->
+                        
+                        <p class="text-muted mb-4">Entrez vos identifiants pour accéder à l'interface administrateur.</p>
+                        <!-- Un paragraphe avec une couleur de texte grise (text-muted) et une marge en bas de 4 unités. -->
+                        
+                        <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm.value)">
+                            <!-- Formulaire avec la directive Angular ngForm et un événement ngSubmit pour la soumission. La méthode "onLogin" sera appelée lors de la soumission du formulaire. -->
+                            
+                            <div class="form-group">
+                                <label for="username">Nom d'utilisateur</label>
+                                <!-- Label pour le champ "Nom d'utilisateur". -->
+                                
+                                <input type="text" class="form-control" name="username" ngModel #usernameInput="ngModel" required>
+                                <!-- Champ de saisie pour le nom d'utilisateur avec ngModel pour la liaison bidirectionnelle des données. Le champ est requis. -->
+                                
+                                <div *ngIf="usernameInput.invalid && usernameInput.touched" class="text-danger">
+                                    <!-- Message d'erreur affiché si le champ est invalide et a été touché. -->
+                                    Veuillez entrer un nom d'utilisateur.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group mb-4">
+                                <label for="password">Mot de passe</label>
+                                <!-- Label pour le champ "Mot de passe". -->
+                                
+                                <input type="password" class="form-control" name="password" ngModel #passwordInput="ngModel" required>
+                                <!-- Champ de saisie pour le mot de passe avec ngModel et la validation "required". Le champ masque l'entrée pour la sécurité. -->
+                                
+                                <div *ngIf="passwordInput.invalid && passwordInput.touched" class="text-danger">
+                                    <!-- Message d'erreur affiché si le mot de passe est invalide et a été touché. -->
+                                    Veuillez entrer un mot de passe.
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-theme btn-block" [disabled]="loginForm.invalid || showLoading">
+                                <!-- Bouton de soumission qui est désactivé si le formulaire est invalide ou si le chargement est en cours. -->
+                                
+                                <i *ngIf="showLoading" class="fas fa-spinner fa-spin"></i>
+                                <!-- Icône de chargement (spinner) affichée lorsque "showLoading" est vrai. -->
+                                
+                                <span *ngIf="showLoading">Chargement...</span>
+                                <!-- Texte "Chargement..." affiché lorsque "showLoading" est vrai. -->
+                                
+                                <span *ngIf="!showLoading">Se connecter</span>
+                                <!-- Texte du bouton affiché lorsque "showLoading" est faux, avec l'option "Se connecter". -->
+                            </button>
+                        </form>
+                        
+                        <a href="#" class="float-right text-primary text-decoration-none">Mot de passe oublié ?</a>
+                        <!-- Lien pour réinitialiser le mot de passe, aligné à droite, avec une couleur de texte primaire. -->
+                        
+                        <p class="text-muted text-center mt-4">Vous n'avez pas de compte ? <a routerLink="/register" class="text-primary text-decoration-none">S'inscrire</a></p>
+                        <!-- Texte centré avec un lien pour s'inscrire si l'utilisateur n'a pas de compte. Le lien utilise "routerLink" pour naviguer vers la page d'inscription. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

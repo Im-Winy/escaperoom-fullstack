@@ -1,0 +1,110 @@
+<main class="p-0 p-lg-5" style="background-color:#F6B51F;">
+    <div class="container bg-dark text-light p-3 rounded">
+        <div class="w-75 m-auto">
+            <!-- Texte introductif -->
+            <p class="text-center">
+                Découvrez l'excitation qui vous enveloppe alors que vous vous aventurez dans les dédales
+                de Escaperoom. Vos sens en éveil, chaque pas résonne comme une note de suspense dans l'air épais de mystère. 
+                Chaque tournant vous plonge plus profondément dans l'inconnu, votre cœur battant au rythme de l'excitation et de l'anticipation. 
+                Les énigmes vous défient, les indices vous guident, mais seule votre perspicacité vous mènera vers la lumière au bout du tunnel. 
+                Dans ce labyrinthe envoûtant, chaque porte franchie vous rapproche un peu plus de la vérité cachée. 
+                Réfléchissez vite, agissez avec précision, et peut-être découvrirez-vous les secrets enfouis de Escaperoom.
+            </p>
+            <!-- Bouton de redirection -->
+            <a routerLink="/tous-les-evenements" class="btn" style="background-color:#F6B51F;"> 
+                Découvrir tous nos évènements <i class="bi bi-bookmark-star-fill"></i>
+            </a>
+        </div>
+
+        <!-- Les évènements les plus demandés -->
+        <h2 class="text-center mt-5">Les évènements les plus demandés</h2>
+        <div class="row">
+            <div class="col-md-3" *ngFor="let evenement of evenements.slice(0, 4)">
+                <a [routerLink]="['/evenement', evenement.idEvenement]" class="text-decoration-none">
+                    <div class="card bg-dark text-light rounded-4 overflow-hidden mb-3" style="max-width: 500px;">
+                        <img [src]="evenement.image" [alt]="evenement.nom" class="card-img-top w-100" style="height: 180px;">
+                        <div class="card-body p-4">
+                            <h3 class="text-center fw-bold mb-3">{{ evenement.nom }}</h3>
+                            <p class="text-center mb-4" style="height: 5rem;">{{ evenement.description.slice(0, 90) }}...</p>
+                            <div class="d-flex flex-column gap-2">
+                                <p><strong>Difficulté:</strong>
+                                    <span *ngIf="evenement.difficulte === 'NORMAL'"> Normal</span>
+                                    <span *ngIf="evenement.difficulte === 'INTERMEDIAIRE'"> Intermédiaire</span>
+                                    <span *ngIf="evenement.difficulte === 'DIFFICILE'"> Difficile</span>
+                                </p>
+                                <p><strong>Durée:</strong> {{ evenement.duree }} minutes</p>
+                                <p><strong>Nombre de joueurs:</strong> {{ evenement.nbeJoueurMax }}</p>
+                                <p><strong>Prix:</strong> {{ evenement.prix }}€</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Horaires et localisation -->
+        <div class="row mt-5">
+            <!-- Section des horaires -->
+            <div class="col-md-6">
+                <h2>Horaires</h2>
+                <table class="w-100 bg-light text-dark" style="height: 250px;">
+                    <thead>
+                        <tr>
+                            <th class="border border-dark text-center p-2 w-auto">jours</th>
+                            <th class="border border-dark text-center p-2 w-auto">matin</th>
+                            <th class="border border-dark text-center p-2 w-auto">après-midi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-dark text-center p-2 w-auto">lundi</td>
+                            <td class="border border-dark text-center p-2 w-auto">10:00 - 13:00</td>
+                            <td class="border border-dark text-center p-2 w-auto">14:00 - 22:00</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-dark text-center p-2 w-auto">mardi</td>
+                            <td class="border border-dark text-center p-2 w-auto">10:00 - 13:00</td>
+                            <td class="border border-dark text-center p-2 w-auto">14:00 - 22:00</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-dark text-center p-2 w-auto">mercredi</td>
+                            <td class="border border-dark text-center p-2 w-auto">10:00 - 13:00</td>
+                            <td class="border border-dark text-center p-2 w-auto">14:00 - 22:00</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-dark text-center p-2 w-auto">jeudi</td>
+                            <td class="border border-dark text-center p-2 w-auto">10:00 - 13:00</td>
+                            <td class="border border-dark text-center p-2 w-auto">14:00 - 22:00</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-dark text-center p-2 w-auto">vendredi</td>
+                            <td class="border border-dark text-center p-2 w-auto">10:00 - 13:00</td>
+                            <td class="border border-dark text-center p-2 w-auto">14:00 - 22:00</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-dark text-center p-2 w-auto">samedi</td>
+                            <td class="border border-dark text-center p-2 w-auto">09:00 - 13:00</td>
+                            <td class="border border-dark text-center p-2 w-auto">14:00 - 23:00</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-dark text-center p-2 w-auto">dimanche</td>
+                            <td class="border border-dark text-center p-2 w-auto">09:00 - 13:00</td>
+                            <td class="border border-dark text-center p-2 w-auto">14:00 - 20:00</td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <!-- Section des locaux -->
+            <div class="col-md-6">
+                <h2>Nos locaux</h2>
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2623.8156126507984!2d2.394102275963026!3d48.880791499130424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66db95761e1f9%3A0x4e42a97a46d36d76!2s123%20Rue%20des%20Lilas%2C%2075019%20Paris!5e0!3m2!1sfr!2sfr!4v1743352193034!5m2!1sfr!2sfr"
+                    class="w-100" style="height: 327px;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <p class="font-switch"><strong>Escaperoom</strong> 123 Rue des Lilas, 75001 Paris, France</p>
+            </div>
+        </div>
+    </div>
+</main>

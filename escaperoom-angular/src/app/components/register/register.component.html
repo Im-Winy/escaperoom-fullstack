@@ -1,0 +1,107 @@
+<main style="background-color: #F6B51F; height: 50rem;">
+    <!-- Le fond de la page est défini avec une couleur spécifique (#F6B51F). -->
+    
+    <div class="container py-5">
+        <!-- Un conteneur Bootstrap avec une marge de 5 unités (py-5) en haut et en bas. -->
+        
+        <div class="row justify-content-center">
+            <!-- Une ligne Bootstrap centrée pour que les éléments à l'intérieur soient alignés au centre de l'écran. -->
+            
+            <div class="col-xl-6 col-lg-8">
+                <!-- Un élément de colonne qui prend 6/12 de la largeur sur des écrans extra-larges et 8/12 sur des écrans larges. -->
+                
+                <div class="card shadow-sm">
+                    <!-- Un "card" Bootstrap avec une ombre légère (shadow-sm). -->
+                    
+                    <div class="card-body p-5">
+                        <!-- Le corps de la carte avec des espacements de 5 unités (p-5). -->
+                        
+                        <h3 class="h4 text-theme text-center mb-4">Register</h3>
+                        <!-- Titre principal avec une taille d’en-tête h4, un texte thématique, centré et une marge en bas de 4 unités. -->
+                        
+                        <h6 class="h5">Heureux de vous revoir!</h6>
+                        <!-- Sous-titre avec une taille d’en-tête h5. -->
+                        
+                        <p class="text-muted mb-4">Entrez vos identifiants pour accéder à l'interface administrateur.</p>
+                        <!-- Paragraphe avec une couleur de texte grise (text-muted) et une marge en bas de 4 unités. -->
+                        
+                        <form #registerForm="ngForm" (ngSubmit)="onRegister(registerForm.value)">
+                            <!-- Formulaire avec une directive Angular (ngForm) et un événement de soumission (ngSubmit). -->
+                            
+                            <div class="form-group">
+                                <label for="prenom">Prénom</label>
+                                <!-- Champ pour le prénom avec un label associé. -->
+                                
+                                <input type="text" class="form-control" name="prenom" ngModel #firstNameInput="ngModel" required>
+                                <!-- Champ de saisie avec ngModel pour la liaison bidirectionnelle. Validation avec "required". -->
+                                
+                                <div *ngIf="firstNameInput.invalid && firstNameInput.touched" class="text-danger">
+                                    <!-- Message d'erreur conditionnel affiché si le champ est invalide et a été touché. -->
+                                    Veuillez entrer votre prénom.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="nom">Nom</label>
+                                <!-- Champ pour le nom avec un label associé. -->
+                                
+                                <input type="text" class="form-control" name="nom" ngModel #lastnameInput="ngModel" required>
+                                <!-- Champ de saisie pour le nom avec ngModel et validation "required". -->
+                                
+                                <div *ngIf="lastnameInput.invalid && lastnameInput.touched" class="text-danger">
+                                    <!-- Message d'erreur affiché pour le nom si le champ est invalide et a été touché. -->
+                                    Veuillez entrer votre nom.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="username">Nom d'utilisateur</label>
+                                <!-- Champ pour le nom d'utilisateur avec un label associé. -->
+                                
+                                <input type="text" class="form-control" name="username" ngModel #usernameInput="ngModel" required>
+                                <!-- Champ de saisie pour le nom d'utilisateur avec ngModel et validation "required". -->
+                                
+                                <div *ngIf="usernameInput.invalid && usernameInput.touched" class="text-danger">
+                                    <!-- Message d'erreur affiché pour le nom d'utilisateur si le champ est invalide et a été touché. -->
+                                    Veuillez entrer un nom d'utilisateur.
+                                </div>
+                            </div>
+                            
+                            <div class="form-group mb-4">
+                                <label for="email">Email</label>
+                                <!-- Champ pour l'email avec un label associé. -->
+                                
+                                <input type="text" class="form-control" name="email" ngModel #emailInput="ngModel" required>
+                                <!-- Champ de saisie pour l'email avec ngModel et validation "required". -->
+                                
+                                <div *ngIf="emailInput.invalid && emailInput.touched" class="text-danger">
+                                    <!-- Message d'erreur affiché pour l'email si le champ est invalide et a été touché. -->
+                                    Veuillez entrer un email valide.
+                                </div>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-theme btn-block" [disabled]="registerForm.invalid || showLoading">
+                                <!-- Bouton de soumission, désactivé si le formulaire est invalide ou si le chargement est en cours. -->
+                                
+                                <i *ngIf="showLoading" class="fas fa-spinner fa-spin"></i>
+                                <!-- Icône de chargement (spinner) affichée pendant que "showLoading" est vrai. -->
+                                
+                                <span *ngIf="showLoading">Chargement...</span>
+                                <!-- Texte de chargement affiché pendant que "showLoading" est vrai. -->
+                                
+                                <span *ngIf="!showLoading">S'inscrire</span>
+                                <!-- Texte de soumission affiché lorsque "showLoading" est faux. -->
+                            </button>
+                        </form>
+                        
+                        <a href="#" class="float-right text-primary text-decoration-none">Mot de passe oublié ?</a>
+                        <!-- Lien pour réinitialiser le mot de passe, aligné à droite, avec une couleur de texte primaire. -->
+                        
+                        <p class="text-muted text-center mt-4">Vous avez un compte ? <a routerLink="/login" class="text-primary text-decoration-none">Se connecter</a></p>
+                        <!-- Texte centré pour les utilisateurs ayant déjà un compte avec un lien pour se connecter, et un lien avec un routerLink Angular. -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,77 @@
+<main class="p-0 p-lg-5" style="background-color: #F6B51F; min-height: 100vh;">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+
+      <!-- Première colonne (Événement) -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div *ngIf="evenement" class="card bg-dark text-light rounded-4 overflow-hidden mx-auto"
+          style="max-width: 500px;">
+          <img [src]="evenement.image" [alt]="evenement.nom" class="card-img-top w-100"
+            style="height: 220px; object-fit: cover;">
+          <div class="card-body p-4">
+            <h3 class="text-center fw-bold mb-3">{{ evenement.nom }}</h3>
+            <p class="text-center mb-4">{{ evenement.description }}</p>
+            <div class="d-flex flex-column gap-2">
+              <p><strong>Difficulté:</strong>
+                <span *ngIf="evenement.difficulte === 'NORMAL'"> Normal</span>
+                <span *ngIf="evenement.difficulte === 'INTERMEDIAIRE'"> Intermédiaire</span>
+                <span *ngIf="evenement.difficulte === 'DIFFICILE'"> Difficile</span>
+              </p>
+              <p><strong>Durée :</strong> {{ evenement.duree }} minutes</p>
+              <p><strong>Nombre de joueurs :</strong> {{ evenement.nbeJoueurMax }}</p>
+              <p><strong>Prix :</strong> {{ evenement.prix }}€</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deuxième colonne (Sélection de date et créneaux horaires) -->
+      <div class="col-md-6 col-lg-8 mb-4">
+        <div class="card bg-dark text-light rounded-4 px-4 py-3">
+          <div class="mb-4">
+            <label for="date-picker" class="form-label text-light">Choisissez une date :</label>
+            <input type="date" id="date-picker" [(ngModel)]="selectedDate" (change)="onDateChange($event)"
+              class="form-control mb-3">
+          </div>
+
+          <span *ngIf="hasRole" class="d-block mb-3">
+            <button (click)="generateSlots()" class="btn btn-secondary w-100">Générer des créneaux</button>
+          </span>
+
+          <hr class="border-light" />
+
+          <!-- Affichage des créneaux horaires -->
+          <div *ngIf="timeSlots && timeSlots.length > 0">
+            <h5 class="text-center mb-3">Créneaux horaires disponibles pour le {{ selectedDate }} :</h5>
+            <table class="table table-dark table-bordered table-hover w-100 mx-auto">
+              <thead>
+                <tr>
+                  <th scope="col">Heure de début</th>
+                  <th scope="col">Heure de fin</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let slot of timeSlots">
+                  <td>{{ slot.startTime.slice(0, 5) }}</td>
+                  <td>{{ slot.endTime.slice(0, 5) }}</td>
+                  <td>
+                    <button class="btn btn-outline-light px-4 py-2 rounded-2" (click)="reserver(slot)">
+                      Réserver
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Aucune disponibilité -->
+          <div *ngIf="timeSlots?.length === null" class="mt-4">
+            <p class="text-warning text-center">Aucun créneau disponible pour cette date.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>

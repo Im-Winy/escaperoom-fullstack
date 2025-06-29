@@ -1,0 +1,32 @@
+<main class="p-3 p-lg-5" style="background-color:#F6B51F;">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3" *ngFor="let evenement of evenements">
+                <a [routerLink]="['/evenement', evenement.idEvenement]" class="text-decoration-none">
+                    <div class="card h-100 bg-dark text-light rounded-4 overflow-hidden shadow-sm">
+                        <img [src]="evenement.image" [alt]="evenement.nom" class="card-img-top"
+                            style="height: 180px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column justify-content-between p-4">
+                            <div>
+                                <h5 class="text-center fw-bold mb-3">{{ evenement.nom }}</h5>
+                                <p class="text-center mb-4 small" style="min-height: 5rem;">
+                                    {{ evenement.description.slice(0, 90) }}...
+                                </p>
+                            </div>
+                            <div class="mt-auto">
+                                <p class="mb-1"><strong>Difficulté:</strong>
+                                    <span *ngIf="evenement.difficulte === 'NORMAL'"> Normal</span>
+                                    <span *ngIf="evenement.difficulte === 'INTERMEDIAIRE'"> Intermédiaire</span>
+                                    <span *ngIf="evenement.difficulte === 'DIFFICILE'"> Difficile</span>
+                                </p>
+                                <p class="mb-1"><strong>Durée:</strong> {{ evenement.duree }} minutes</p>
+                                <p class="mb-1"><strong>Joueurs max:</strong> {{ evenement.nbeJoueurMax }}</p>
+                                <p class="mb-0"><strong>Prix:</strong> {{ evenement.prix }} €</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>

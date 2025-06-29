@@ -1,0 +1,25 @@
+# Ne pas copier les dépendances locales (elles seront installées dans le container)
+node_modules
+
+# Fichiers de logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Fichiers de configuration d’IDE
+.vscode
+
+# Tests Angular
+src/**/*.spec.ts
+src/test.ts
+e2e
+
+# Fichiers d’environnement locaux
+.env
+.env.local
+.env.*.local
+
+# Autres dossiers/fichiers temporaires
+.tmp
+.temp
+.cache

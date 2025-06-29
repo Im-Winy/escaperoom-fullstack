@@ -1,0 +1,13 @@
+<footer class="bg-dark pt-4 pb-4">
+    <ul class="d-flex flex-column flex-lg-row justify-content-center gap-3 list-unstyled">
+        <!-- d-flex → Active le display: flex;
+        flex-column → Par défaut (mobile), les éléments sont en colonne.
+        flex-lg-row → À partir de lg (≥ 992px), ils passent en ligne.
+        justify-content-center → Centre les éléments horizontalement quand ils sont en ligne.
+        gap-3 → Ajoute un espacement entre les blocs. -->
+        <li><a href="#" class="text-decoration-none text-light"><i class="bi bi-telephone-fill"></i> 01 23 45 67 89</a></li>
+        <li><a href="#" class="text-decoration-none text-light"><i class="bi bi-envelope-at-fill"></i> contact&#64;escaperoom.com</a></li>
+        <li><a href="#" class="text-decoration-none text-light"><i class="bi bi-geo-alt-fill"></i> 123 Rue des Lilas, 75001 Paris, France</a></li>
+        <li><a routerLink="/profile" class="text-decoration-none text-light"><i class="bi bi-person-fill"></i> <span>{{ user ? user.username : 'My Account' }}</span></a></li>
+    </ul>
+</footer>

@@ -1,0 +1,141 @@
+<!-- Conteneur principal avec fond jaune et padding supérieur -->
+<main style="background-color: #F6B51F; min-height: 100vh; padding: 60px 0;">
+    <div class="container">
+        <div class="row g-4">
+
+            <!-- Section Carrousel des Réservations -->
+            <div class="col-lg-8">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-dark text-white text-center">
+                        <h4 class="mb-0">Vos Réservations</h4>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- Carrousel -->
+                        <div id="reservationCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div *ngFor="let group of groupedReservations; let i = index" class="carousel-item"
+                                    [class.active]="i === 0">
+
+                                    <!-- Grille de Cartes -->
+                                    <div class="row row-cols-1 row-cols-md-2 g-4">
+                                        <div *ngFor="let reservation of group"
+                                            (click)="selectedReservation(reservation)" class="col"
+                                            [class.border-success]="reservation.idReservation === reservationId"
+                                            style="cursor: pointer;">
+                                            <div class="card h-100 shadow-sm">
+                                                <div class="card-body">
+                                                    <h5 class="card-title text-primary">Réservation #{{
+                                                        reservation.numeroReservation }}</h5>
+                                                    <p><strong>Date de réservation :</strong> {{
+                                                        reservation.dateReservation }}</p>
+                                                    <p><strong>Montant total (TTC) :</strong> {{ reservation.montant
+                                                        }}
+                                                        €</p>
+                                                    <p><strong>Montant hors taxes (HT) :</strong> {{
+                                                        reservation.montantHT }} €</p>
+                                                    <p><strong>Montant de la TVA :</strong> {{
+                                                        reservation.montantTVA }}
+                                                        €</p>
+                                                    <p><strong>Événement :</strong> {{ reservation.evenement.nom }}
+                                                    </p>
+                                                    <p><strong>Date de l'événement :</strong> {{
+                                                        reservation.timeSlot.date }}</p>
+                                                    <p><strong>Heure de l'évènement :</strong> {{
+                                                        reservation.timeSlot.startTime }}</p>
+                                                    <p *ngIf="reservation.paiement; else noPaiement">
+                                                        <strong>Statut de paiement :</strong> {{
+                                                        reservation.paiement.statut }}
+                                                    </p>
+                                                    <ng-template #noPaiement>
+                                                        <p class="text-muted"><em>Non payé</em></p>
+                                                    </ng-template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contrôles de navigation -->
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <button class="btn btn-outline-dark" type="button" data-bs-target="#reservationCarousel"
+                                    data-bs-slide="prev">
+                                    <i class="fas fa-chevron-left me-2"></i> Précédent
+                                </button>
+                                <button class="btn btn-outline-dark" type="button" data-bs-target="#reservationCarousel"
+                                    data-bs-slide="next">
+                                    Suivant <i class="fas fa-chevron-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Paiement -->
+            <div class="col-lg-4">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4 class="mb-0">Paiement</h4>
+                    </div>
+                    <div class="card-body">
+                        <form (ngSubmit)="onSubmit()" #paymentForm="ngForm" novalidate>
+                            <div class="mb-3">
+                                <label for="reservationId" class="form-label">ID Réservation</label>
+                                <input type="number" class="form-control" id="reservationId" name="reservationId"
+                                    [(ngModel)]="reservationId" required readonly />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="montant" class="form-label">Montant (€)</label>
+                                <input type="number" class="form-control" id="montant" name="amount"
+                                    [(ngModel)]="paymentRequest.montant" required readonly />
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="cardNumber" class="form-label">Numéro de carte</label>
+                                <input type="text" class="form-control" id="cardNumber" name="cardNumber"
+                                    [(ngModel)]="paymentRequest.numeroCarteBancaire" required maxlength="19"
+                                    placeholder="1234 5678 9012 3456" />
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="expiryDate" class="form-label">Expiration</label>
+                                    <input type="text" class="form-control" id="expiryDate" name="expiryDate"
+                                        [(ngModel)]="paymentRequest.dateExppiration" required
+                                        pattern="^(0[1-9]|1[0-2])\/\d{2}$" placeholder="MM/AA" />
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cvv" name="cvv"
+                                        [(ngModel)]="paymentRequest.cvv" required maxlength="4" placeholder="123" />
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success" [disabled]="paymentForm.invalid">
+                                    Payer
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Message de confirmation -->
+                        <div *ngIf="paiement" class="alert alert-success mt-4" role="alert">
+                            <h5 class="alert-heading">✅ Paiement effectué</h5>
+                            <hr />
+                            <p><strong>Montant :</strong> {{ paiement.montant }} €</p>
+                            <p><strong>Statut :</strong> {{ paiement.statut }}</p>
+                            <p><strong>Date :</strong> {{ paiement.datePaiement | date: 'dd/MM/yyyy HH:mm' }}</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>

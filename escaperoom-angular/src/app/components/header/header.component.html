@@ -1,0 +1,65 @@
+<header>
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container-fluid">
+            <!-- Logo / Nom de la marque -->
+            <a class="navbar-brand text-light" routerLink="/home" routerLinkActive="active">ESCAPEROOM</a>
+
+            <!-- Bouton pour mobile -->
+            <button class="navbar-toggler border-light" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Contenu de la navbar -->
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <!-- Navigation principale -->
+                <div class="navbar-nav me-auto">
+                    <a class="nav-link text-light fs-5" routerLink="/home" routerLinkActive="active">
+                        <i class="bi bi-house-door-fill"></i> Accueil
+                    </a>
+                    <a class="nav-link text-light fs-5" routerLink="/tous-les-evenements" routerLinkActive="active">
+                        <i class="bi bi-bookmark-star-fill"></i> Événements
+                    </a>
+                    <a class="nav-link text-light fs-5" routerLink="/about" routerLinkActive="active">
+                        <i class="bi bi-info-circle-fill"></i> À propos
+                    </a>
+                    <a class="nav-link text-light fs-5" routerLink="/contact" routerLinkActive="active">
+                        <i class="bi bi-telephone-fill"></i> Contact
+                    </a>
+                </div>
+
+                <!-- Menu utilisateur -->
+                <div class="d-flex align-items-center gap-3 ms-auto">
+                    <span *ngIf="!isLoggedIn" class="d-flex gap-2">
+                        <a class="nav-link text-light" routerLink="/login" routerLinkActive="active">
+                            <i class="bi bi-person-fill-lock"></i> Se connecter
+                        </a>
+                        <a class="nav-link text-light" routerLink="/register">
+                            <i class="bi bi-person-plus-fill"></i> S'inscrire
+                        </a>
+                    </span>
+
+                    <span *ngIf="isLoggedIn" class="d-flex gap-2 align-items-center">
+                        <a class="btn btn-link text-danger p-0 text-decoration-none" (click)="logout()">
+                            <i class="bi bi-person-fill-x"></i> Déconnexion
+                        </a>
+                    </span>
+
+                    <span *ngIf="hasRole" class="d-flex gap-2 align-items-center">
+                        <a class="nav-link text-light" routerLink="/admin">
+                            <i class="bi bi-pencil-square"></i> Admin
+                        </a>
+                    </span>
+
+                    <a class="nav-link text-light" routerLink="/profile">
+                        <i class="bi bi-person-circle"></i> Profil
+                    </a>
+                    <a class="nav-link text-light" routerLink="/booking">
+                        <i class="bi bi-bookmarks-fill"></i> Paiement
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
