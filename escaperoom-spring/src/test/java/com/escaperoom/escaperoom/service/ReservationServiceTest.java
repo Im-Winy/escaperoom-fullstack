@@ -34,14 +34,14 @@ class ReservationServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Création des mocks des dépendances du service
+        // Création des mocks des dépendances utilisées par ReservationService
         reservationRepository = mock(IReservationRepository.class);
         userRepository = mock(IUserRepository.class);
         timeSlotRepository = mock(ITimeSlotRepository.class);
         evenementRepository = mock(IEvenementRepository.class);
         emailService = mock(EmailService.class);
 
-        // Injection manuelle des mocks dans le service à tester
+        // Initialisation du service avec injection manuelle des mocks
         reservationService = new ReservationService();
         reservationService.reservationRepository = reservationRepository;
         reservationService.userRepository = userRepository;
@@ -50,7 +50,11 @@ class ReservationServiceTest {
         reservationService.emailService = emailService;
     }
 
-    // Test de la réservation réussie
+    /**
+     * Test d’un scénario de réservation réussie.
+     * Vérifie que tous les champs de la réservation sont correctement remplis
+     * et que les montants HT/TVA/TTC sont bien calculés.
+     */
     @Test
     void testReserve_Success() {
         Long userId = 1L;
@@ -63,56 +67,64 @@ class ReservationServiceTest {
 
         Evenement event = new Evenement();
         event.setIdEvenement(eventId);
-        event.setPrix(40);
+        event.setPrix(40); // Prix TTC
 
         TimeSlot timeSlot = new TimeSlot();
         timeSlot.setIdTimeSlot(timeSlotId);
 
-        // Configuration des comportements simulés
+        // Simulation des retours de repository
         when(timeSlotRepository.findById(timeSlotId)).thenReturn(Optional.of(timeSlot));
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         when(evenementRepository.findById(eventId)).thenReturn(Optional.of(event));
         when(reservationRepository.findByTimeSlotAndEvenement(timeSlot, event)).thenReturn(Optional.empty());
         when(reservationRepository.save(any(Reservation.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Appel de la méthode à tester
+        // Exécution
         Reservation result = reservationService.reserve(timeSlotId, userId, eventId);
 
-        // Vérifications de l'objet retourné
+        // Vérification des résultats
         assertNotNull(result);
         assertEquals(user, result.getUser());
         assertEquals(event, result.getEvenement());
         assertEquals(timeSlot, result.getTimeSlot());
 
-        // Vérification des montants avec précision à 2 décimales
+        // Vérifie les montants (HT, TVA, TTC)
         assertEquals(new BigDecimal("40.00"), result.getMontantHT().setScale(2));
         assertEquals(new BigDecimal("8.00"), result.getMontantTVA().setScale(2));
         assertEquals(new BigDecimal("48.00"), result.getMontant().setScale(2));
     }
 
-    // Test quand le créneau horaire n'existe pas : doit lancer une exception
+    /**
+     * Test d’échec : le créneau horaire n'existe pas.
+     */
     @Test
     void testReserve_TimeSlotNotFound() {
         when(timeSlotRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(IllegalStateException.class, () -> reservationService.reserve(1L, 2L, 3L));
+        Exception exception = assertThrows(IllegalStateException.class, () ->
+                reservationService.reserve(1L, 2L, 3L));
 
         assertEquals("Ce créneau n'existe pas.", exception.getMessage());
     }
 
-    // Test quand l'utilisateur n'existe pas : exception attendue
+    /**
+     * Test d’échec : l'utilisateur est introuvable.
+     */
     @Test
     void testReserve_UserNotFound() {
         TimeSlot timeSlot = new TimeSlot();
         when(timeSlotRepository.findById(anyLong())).thenReturn(Optional.of(timeSlot));
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(RuntimeException.class, () -> reservationService.reserve(1L, 2L, 3L));
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                reservationService.reserve(1L, 2L, 3L));
 
         assertEquals("Utilisateur introuvable", exception.getMessage());
     }
 
-    // Test quand l'événement n'existe pas : exception attendue
+    /**
+     * Test d’échec : l’événement est introuvable.
+     */
     @Test
     void testReserve_EventNotFound() {
         TimeSlot timeSlot = new TimeSlot();
@@ -122,12 +134,15 @@ class ReservationServiceTest {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(evenementRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(RuntimeException.class, () -> reservationService.reserve(1L, 2L, 3L));
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                reservationService.reserve(1L, 2L, 3L));
 
         assertEquals("Événement introuvable", exception.getMessage());
     }
 
-    // Test quand le créneau est déjà réservé pour l'événement : exception attendue
+    /**
+     * Test d’échec : le créneau est déjà réservé pour l’événement.
+     */
     @Test
     void testReserve_AlreadyReserved() {
         TimeSlot timeSlot = new TimeSlot();
@@ -140,22 +155,29 @@ class ReservationServiceTest {
         when(evenementRepository.findById(anyLong())).thenReturn(Optional.of(event));
         when(reservationRepository.findByTimeSlotAndEvenement(timeSlot, event)).thenReturn(Optional.of(existing));
 
-        Exception exception = assertThrows(IllegalStateException.class, () -> reservationService.reserve(1L, 2L, 3L));
+        Exception exception = assertThrows(IllegalStateException.class, () ->
+                reservationService.reserve(1L, 2L, 3L));
 
         assertEquals("Ce créneau est déjà réservé pour cet événement.", exception.getMessage());
     }
 
-    // Test génération de créneaux horaires quand ils existent déjà pour la journée : réponse 409 CONFLICT attendue
+    /**
+     * Test d’échec : tentative de génération de créneaux horaires sur une date
+     * pour laquelle des créneaux existent déjà.
+     */
     @Test
     void testGenerateTimeSlotsForDay_AlreadyExists() {
         LocalDate date = LocalDate.of(2025, 5, 20);
         when(timeSlotRepository.findByDate(date)).thenReturn(List.of(new TimeSlot()));
 
         ResponseEntity<?> response = reservationService.generateTimeSlotsForDay(date);
-        assertEquals(409, response.getStatusCodeValue());
+        assertEquals(409, response.getStatusCodeValue()); // HTTP 409 CONFLICT
     }
 
-    // Test génération réussie de créneaux horaires sur une journée sans créneaux existants
+    /**
+     * Test de succès : génération des créneaux horaires sur une journée vide.
+     * On s'attend à recevoir 12 créneaux (de 10h à 22h, 1h chacun).
+     */
     @Test
     void testGenerateTimeSlotsForDay_Success() {
         LocalDate date = LocalDate.of(2025, 5, 21);
@@ -167,10 +189,12 @@ class ReservationServiceTest {
 
         List<TimeSlot> slots = (List<TimeSlot>) response.getBody();
         assertNotNull(slots);
-        assertEquals(12, slots.size()); // Vérifie la création de 12 créneaux horaires (10h à 22h)
+        assertEquals(12, slots.size()); // de 10h à 22h inclus
     }
 
-    // Test récupération des créneaux horaires disponibles quand l'événement n'existe pas
+    /**
+     * Test d’échec : récupération des créneaux disponibles pour un événement inexistant.
+     */
     @Test
     void testGetAvailableTimeSlotsForEvenement_EventNotFound() {
         when(evenementRepository.findById(anyLong())).thenReturn(Optional.empty());

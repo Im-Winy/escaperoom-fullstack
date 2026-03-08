@@ -21,12 +21,18 @@ class EvenementServiceTest {
 
 	@BeforeEach
 	void setUp() {
+		// Création d’un mock du repository
 		evenementRepository = mock(IEvenementRepository.class);
+
+		// Initialisation du service avec le mock injecté manuellement
 		evenementService = new EvenementService();
 		evenementService.evenementRepository = evenementRepository;
 	}
 
-	// Test de la sauvegarde d'un événement passé directement
+	/**
+	 * Test de la méthode de sauvegarde avec un objet Evenement.
+	 * Vérifie que le repository est bien appelé et que l’objet retourné est celui sauvegardé.
+	 */
 	@Test
 	void testSaveEvenement() {
 		Evenement evenement = new Evenement();
@@ -38,7 +44,10 @@ class EvenementServiceTest {
 		verify(evenementRepository, times(1)).save(evenement);
 	}
 
-	// Test de la sauvegarde via les paramètres (méthode surchargée)
+	/**
+	 * Test de la méthode de sauvegarde en passant les paramètres un par un.
+	 * Vérifie que l'objet est correctement construit et persisté.
+	 */
 	@Test
 	void testSaveEvenement_WithParams() {
 		when(evenementRepository.save(any(Evenement.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -51,11 +60,14 @@ class EvenementServiceTest {
 		assertEquals(60, saved.getDuree());
 		assertEquals(5, saved.getNbeJoueurMax());
 		assertEquals(100, saved.getPrix());
-		assertEquals(Difficulte.NORMAL, saved.getDifficulte()); // Conversion correcte de la chaîne en enum
+		assertEquals(Difficulte.NORMAL, saved.getDifficulte()); // Conversion correcte de la chaîne vers l'enum
 		verify(evenementRepository).save(any(Evenement.class));
 	}
 
-	// Test de la récupération d'un événement par son ID
+	/**
+	 * Test de récupération d’un événement par son identifiant.
+	 * Vérifie que le bon événement est retourné et que le repository est bien appelé.
+	 */
 	@Test
 	void testGetEvenementById() {
 		Evenement evenement = new Evenement();
@@ -68,7 +80,10 @@ class EvenementServiceTest {
 		verify(evenementRepository).findById(1L);
 	}
 
-	// Test de récupération de tous les événements
+	/**
+	 * Test de récupération de tous les événements.
+	 * Vérifie que la liste retournée contient bien les éléments simulés.
+	 */
 	@Test
 	void testGetEvenements() {
 		List<Evenement> list = Arrays.asList(new Evenement(), new Evenement());
@@ -79,7 +94,10 @@ class EvenementServiceTest {
 		assertEquals(2, result.size());
 	}
 
-	// Test de suppression d'un événement donné
+	/**
+	 * Test de suppression d’un événement en passant directement l’objet.
+	 * Vérifie que la méthode delete du repository est bien appelée.
+	 */
 	@Test
 	void testDeleteEvenement() {
 		Evenement evenement = new Evenement();
@@ -88,14 +106,20 @@ class EvenementServiceTest {
 		verify(evenementRepository, times(1)).delete(evenement);
 	}
 
-	// Test de suppression d'un événement par ID
+	/**
+	 * Test de suppression d’un événement par son identifiant.
+	 * Vérifie l’appel au repository.
+	 */
 	@Test
 	void testDeleteEvenementById() {
 		evenementService.deleteEvenement(10L);
 		verify(evenementRepository, times(1)).deleteById(10L);
 	}
 
-	// Test de mise à jour d'un événement existant
+	/**
+	 * Test de mise à jour d’un événement existant.
+	 * Vérifie que les champs sont bien mis à jour et que l'objet est sauvegardé.
+	 */
 	@Test
 	void testUpdateEvenement() {
 		Evenement evenement = new Evenement();
@@ -104,22 +128,28 @@ class EvenementServiceTest {
 		evenement.setDescription("OldDesc");
 		evenement.setDifficulte(Difficulte.NORMAL);
 
+		// Simule la présence de l'événement en base
 		when(evenementRepository.findById(1L)).thenReturn(Optional.of(evenement));
+		// Retourne l'objet passé à save
 		when(evenementRepository.save(any(Evenement.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
+		// Appel de la méthode à tester
 		Evenement updated = evenementService.updateEvenement(1L, "New", "Desc", "img.png", 90, 6, 120, "intermediaire");
 
+		// Vérifications des modifications
 		assertEquals("New", updated.getNom());
 		assertEquals("Desc", updated.getDescription());
 		assertEquals("img.png", updated.getImage());
 		assertEquals(90, updated.getDuree());
 		assertEquals(6, updated.getNbeJoueurMax());
 		assertEquals(120, updated.getPrix());
-		assertEquals(Difficulte.INTERMEDIAIRE, updated.getDifficulte()); // Conversion string -> enum
+		assertEquals(Difficulte.INTERMEDIAIRE, updated.getDifficulte());
 		verify(evenementRepository).save(evenement);
 	}
 
-	// Test alternatif de la récupération d'un événement avec Optional
+	/**
+	 * Test de la méthode alternative findById qui retourne un Optional.
+	 */
 	@Test
 	void testFindById() {
 		Evenement evenement = new Evenement();
