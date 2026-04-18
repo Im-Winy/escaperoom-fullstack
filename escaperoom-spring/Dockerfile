@@ -1,5 +1,5 @@
 # Utilise l'image officielle OpenJDK 17 basée sur Alpine Linux, légère et adaptée pour exécuter des applications Java
-FROM openjdk:17-jdk-alpine
+FROM eclipse-temurin:17-jdk
 
 # Crée un volume temporaire accessible à l'intérieur du container (souvent utilisé pour les fichiers temporaires)
 VOLUME /tmp
