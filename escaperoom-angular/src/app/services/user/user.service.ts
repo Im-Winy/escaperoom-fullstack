@@ -19,27 +19,27 @@ export class UserService {
 
   // Récupère la liste des utilisateurs depuis l'API
   public getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.host}/api/admin/list`);
+    return this.http.get<User[]>(`${this.host}/admin/list`);
   }
 
   // Ajoute un nouvel utilisateur en envoyant un formulaire de données
   public addUser(formData: FormData): Observable<User> {
-    return this.http.post<User>(`${this.host}/api/admin/add`, formData);
+    return this.http.post<User>(`${this.host}/admin/add`, formData);
   }
 
   // Met à jour un utilisateur existant en envoyant un formulaire de données
   public updateUser(formData: FormData, userId: number): Observable<User> {
-    return this.http.put<User>(`${this.host}/api/admin/update/${userId}`, formData);
+    return this.http.put<User>(`${this.host}/admin/update/${userId}`, formData);
   }
 
   // Met à jour un utilisateur existant en envoyant un formulaire de données
   public updateMyProfile(formData: FormData, userId: number): Observable<User> {
-    return this.http.put<User>(`${this.host}/api/user/user/${userId}`, formData);
+    return this.http.put<User>(`${this.host}/user/user/${userId}`, formData);
   }
 
   // Supprime un utilisateur via son identifiant
   public deleteUser(userId: number): Observable<CustomHttpResponse> {
-    return this.http.delete<CustomHttpResponse>(`${this.host}/api/admin/delete/${userId}`);
+    return this.http.delete<CustomHttpResponse>(`${this.host}/admin/delete/${userId}`);
   }
 
   // Sauvegarde une liste d'utilisateurs dans le cache local (localStorage)

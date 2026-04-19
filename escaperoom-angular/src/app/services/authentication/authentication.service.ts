@@ -24,7 +24,7 @@ export class AuthenticationService {
   // Méthode pour se connecter
   public login(user: User): Observable<HttpResponse<User>> {
     // Envoie une requête POST pour l'inscription de l'utilisateur
-    return this.http.post<User>(`${this.host}/api/auth/login`, user, { observe: 'response' }).pipe(
+    return this.http.post<User>(`${this.host}/auth/login`, user, { observe: 'response' }).pipe(
       tap(() => {
         window.location.reload(); // Recharge la page après la connexion réussie
       })
@@ -34,7 +34,7 @@ export class AuthenticationService {
   // Méthode pour s'enregistrer
   public register(user: User): Observable<User> {
     // Envoie une requête POST pour l'inscription de l'utilisateur
-    return this.http.post<User>(`${this.host}/api/auth/register`, user);
+    return this.http.post<User>(`${this.host}/auth/register`, user);
   }
 
   // Méthode pour se déconnecter

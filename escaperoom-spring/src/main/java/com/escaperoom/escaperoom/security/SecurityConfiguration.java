@@ -40,7 +40,7 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost")); // Origine autorisée (frontend Angular)
+        configuration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost", "http://141.253.123.152")); // Origine autorisée (frontend Angular)
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Méthodes HTTP autorisées
         configuration.setAllowedHeaders(List.of("*")); // Tous les headers autorisés
         configuration.setExposedHeaders(List.of("Authorization", "Jwt-Token", "Access-Control-Allow-Origin")); // Headers visibles côté client

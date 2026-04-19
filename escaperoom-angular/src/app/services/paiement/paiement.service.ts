@@ -30,7 +30,7 @@ export class PaiementService {
 
   public processPayment(reservationId: number, paymentRequest: PaymentRequest): Observable<Paiement> {
     const params = new HttpParams().set('reservationId', reservationId.toString());
-    return this.http.post<Paiement>(`${this.host}/api/auth/payment`, paymentRequest, { params });
+    return this.http.post<Paiement>(`${this.host}/auth/payment`, paymentRequest, { params });
   }
 
   public getAllPayments(): Observable<Paiement[]> {
