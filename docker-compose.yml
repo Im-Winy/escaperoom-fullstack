@@ -7,8 +7,6 @@ services:
       #  Variables d’environnement nécessaires à l’initialisation de MySQL
       MYSQL_ROOT_PASSWORD: root # Mot de passe du super-utilisateur root
       MYSQL_DATABASE: escaperoom_db # Base de données initiale à créer au démarrage
-      MYSQL_USER: escape_user
-      MYSQL_PASSWORD: escape_pass
     ports:
       - "3306:3306" #  Expose le port MySQL local 3306 à l’hôte
     volumes:
@@ -25,8 +23,8 @@ services:
     environment:
       #  Configuration des variables d’environnement pour Spring Boot
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/escaperoom_db?createDatabaseIfNotExist=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: escape_user
-      SPRING_DATASOURCE_PASSWORD: escape_pass
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: update #  Mise à jour automatique du schéma de la BDD
       SPRING_JPA_SHOW_SQL: "true" #  Affiche les requêtes SQL dans la console
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
