@@ -7,6 +7,8 @@ services:
       #  Variables d’environnement nécessaires à l’initialisation de MySQL
       MYSQL_ROOT_PASSWORD: root # Mot de passe du super-utilisateur root
       MYSQL_DATABASE: escaperoom_db # Base de données initiale à créer au démarrage
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
     ports:
       - "3306:3306" #  Expose le port MySQL local 3306 à l’hôte
     volumes:
