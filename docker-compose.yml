@@ -21,6 +21,7 @@ services:
 
   backend:
     build: ./escaperoom-spring #  Construit le backend Spring Boot à partir du Dockerfile situé dans ./escaperoom-spring
+    restart: always
     ports:
       - "8089:8089" #  Expose le port du backend vers l’hôte
     depends_on:
