@@ -14,10 +14,10 @@ services:
     networks:
       - escaperoom_net #  Connecte le service à un réseau Docker commun pour permettre la communication avec les autres services
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pazerty"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 20
 
   backend:
     build: ./escaperoom-spring #  Construit le backend Spring Boot à partir du Dockerfile situé dans ./escaperoom-spring
