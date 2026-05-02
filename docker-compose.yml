@@ -5,7 +5,7 @@ services:
     command: --innodb-log-file-size=256M --innodb-buffer-pool-size=256M
     environment:
       #  Variables d’environnement nécessaires à l’initialisation de MySQL
-      MYSQL_ROOT_PASSWORD: root # Mot de passe du super-utilisateur root
+      MYSQL_ROOT_PASSWORD: azerty # Mot de passe du super-utilisateur root
       MYSQL_DATABASE: escaperoom_db # Base de données initiale à créer au démarrage
     ports:
       - "3306:3306" #  Expose le port MySQL local 3306 à l’hôte
@@ -24,7 +24,7 @@ services:
       #  Configuration des variables d’environnement pour Spring Boot
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/escaperoom_db?createDatabaseIfNotExist=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 
+      SPRING_DATASOURCE_PASSWORD: azerty
       SPRING_JPA_HIBERNATE_DDL_AUTO: update #  Mise à jour automatique du schéma de la BDD
       SPRING_JPA_SHOW_SQL: "true" #  Affiche les requêtes SQL dans la console
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQLDialect
