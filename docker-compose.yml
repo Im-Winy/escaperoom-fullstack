@@ -4,7 +4,7 @@ services:
   mysql:
     image: mysql:8.0
     restart: always
-    command: --innodb-log-file-size=256M --innodb-buffer-pool-size=256M
+    command: --innodb-log-file-size=256M --innodb-buffer-pool-size=256M --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: azerty
       MYSQL_DATABASE: escaperoom_db
@@ -17,7 +17,7 @@ services:
       - escaperoom_net
     healthcheck:
       # ✅ vrai test de connexion SQL
-      test: ["CMD", "mysql", "-h", "localhost", "-uroot", "-pazerty", "-e", "SELECT 1"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -pazerty"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -34,6 +34,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/escaperoom_db?createDatabaseIfNotExist=true&serverTimezone=UTC&autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: azerty
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: "true"
       SPRING_MAIL_USERNAME: williamnyacka14@gmail.com
